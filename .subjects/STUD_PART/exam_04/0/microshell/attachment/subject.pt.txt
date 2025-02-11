@@ -1,0 +1,31 @@
+Nome da pasta  : microshell
+Arquivos esperados   : microshell.c
+Funções permitidas: malloc, free, write, close, fork, waitpid, signal, kill, exit, chdir, execve, dup, dup2, pipe, strcmp, strncmp
+--------------------------------------------------------------------------------------
+
+Escreva um programa que se comportará como a execução de um comando shell
+- A linha de comando a ser executada será os argumentos deste programa
+- O caminho do executável será absoluto ou relativo, mas seu programa não deve construir um caminho (a partir da variável PATH, por exemplo)
+- Você deve implementar "|" e ";" como no bash
+	- nunca tentaremos um "|" imediatamente seguido ou precedido por nada ou "|" ou ";"
+- Seu programa deve implementar o comando embutido cd apenas com um caminho como argumento (sem '-' ou sem parâmetros)
+	- se cd tiver o número errado de argumentos, seu programa deve imprimir no STDERR "error: cd: bad arguments" seguido por um '\n'
+	- se cd falhar, seu programa deve imprimir no STDERR "error: cd: cannot change directory to path_to_change" seguido por um '\n' com path_to_change substituído pelo argumento para cd
+	- um comando cd nunca será imediatamente seguido ou precedido por um "|"
+- Você não precisa gerenciar nenhum tipo de caracteres curinga (*, ~ etc...)
+- Você não precisa gerenciar variáveis de ambiente ($BLA ...)
+- Se uma chamada de sistema, exceto execve e chdir, retornar um erro, seu programa deve imprimir imediatamente "error: fatal" no STDERR seguido por um '\n' e o programa deve sair
+- Se execve falhar, você deve imprimir "error: cannot execute executable_that_failed" no STDERR seguido por um '\n' com executable_that_failed substituído pelo caminho do executável que falhou (Deve ser o primeiro argumento de execve)
+- Seu programa deve ser capaz de gerenciar mais de centenas de "|" mesmo se limitarmos o número de "arquivos abertos" para menos de 30.
+
+por exemplo, isso deve funcionar:
+$>./microshell /bin/ls "|" /usr/bin/grep microshell ";" /bin/echo i love my microshell
+microshell
+i love my microshell
+$>
+
+Dicas:
+Não se esqueça de passar a variável de ambiente para execve
+
+Dicas:
+Não vaze descritores de arquivos!
